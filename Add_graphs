@@ -1,0 +1,24 @@
+for c1 in Drug_Disease
+LET data = [
+                {
+                    "disease" : { "name": c1.to },
+                    "drug" : { "name": c1.from }
+                }
+            ]
+FOR rel in data
+    LET dis_Id = FIRST(
+        FOR c IN Disease
+            FILTER c.name == rel.disease.name
+            LIMIT 1
+            RETURN c._id
+    )
+    LET drug_Id = FIRST(
+        FOR c IN Drug
+            FILTER c.name == rel.drug.name
+            LIMIT 1
+            RETURN c._id
+    )
+    FILTER dis_Id != null AND drug_Id != null
+	//顶点和边相连
+    INSERT { _from: drug_Id, _to: dis_Id } INTO DD_Edge
+    RETURN NEW
