@@ -3,9 +3,10 @@
 1、首先配置Arangodb环境，用Linux和Windows均可配置
 Linux的配置方法如下：
 a、下载安装包：https://www.arangodb.com/download/
-b、安装Arangodb：rpm -ivh arangodb3-3.9.0-1.0.x86_64.rpm
+b、安装Arangodb：sudo yum install arangodb3-3.6.0-1.0.x86_64.rpm
 c、设置root密码：运行arango-secure-installation
 d、如需修改访问地址，则更新配置文件/etc/arangodb3/arangod.conf
+	vim arangod.conf
 	默认：endpoint = tcp://127.0.0.1:8529，默认端口为8529
 	如：endpoint = tcp://10.10.10.1:8529
 e、开启ArangoDB
