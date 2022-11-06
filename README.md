@@ -19,4 +19,6 @@ f、查看arangoDB运行状态
 2、创建document文档数据表：Disease、Drug、Disease_Drug（边界），将文件导入Arangodb数据库，界面只接受json文件，如文档是CSV,则需要将文档转换为json格式
 3、创建edge文件数据图:Relation，将表的数据进行关联
 ----------------------------------------------------
+window系统配置方法如下：
+
 
