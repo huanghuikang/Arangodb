@@ -20,5 +20,10 @@ f、查看arangoDB运行状态
 3、创建edge文件数据图:Relation，将表的数据进行关联
 ----------------------------------------------------
 window系统配置方法如下：
-
-
+1、下载Arangodb压缩包：
+链接：https://pan.baidu.com/s/117vOGh-HKKmIFwk7C1SAlQ 
+提取码：as4w
+2、Windows配置环境变量，将解压包的ArangoDB3e-3.7.18_win64\usr\bin配置到PATH系统变量中
+3、双击打开bin文件夹中的arangodb.exe执行文件
+4、打开浏览器进入http://127.0.0.1:8529/_db/_system/_admin/aardvark/index.html#login（若没修改arangod.conf配置文件，一般地址不变）
+5、登录界面用root用户，密码为空
