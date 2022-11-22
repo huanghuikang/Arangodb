@@ -1,7 +1,9 @@
                                          Arangodb Learning
 # Arangodb
 
-多模型数据库，值得一学
+Arangodb概念
+
+ArangoDB是一款储存文档、图形并提供查询的多模型数据库,支持键值对、文档和图形模式的数据储存
 
 一、首先配置Arangodb环境，用Linux和Windows均可配置
 Linux的配置方法如下：
@@ -52,9 +54,6 @@ window系统配置方法如下：
 <img width="1440" alt="3" src="https://user-images.githubusercontent.com/35037130/202941853-9885a4e9-6e27-458f-b594-fbd21dff6802.png">
 
 ----------------------------------------------------------
-Arangodb概念
-
-ArangoDB是一款储存文档、图形并提供查询的多模型数据库,支持键值对、文档和图形模式的数据储存
 
 ArangoDB查询语言(AQL)可用于检索和修改存储在ArangoDB中的数据。AQL主要是一种声明性语言，AQL类似于结构化查询语言(SQL)。AQL支持读取和修改集合数据，但不支持创建和删除数据库、集合和索引等数据定义操作。它是一种纯数据操作语言(DML)，而不是数据定义语言(DDL)或数据控制语言(DCL)。
 
@@ -74,8 +73,27 @@ Graph：图表，根据指定的一个或多个Document和Edge进行结合，组
 
 Arangodb基本使用
 
+ArangoDB 的查询语言 AQL 检索我们的文档。
+
+直接查看Collection目录里面有Dcument或Edge，点击其中一个文档，里面有相关文档的信息，可以对文档的信息进行修改、删除操作，对数据内容进行新增、修改、删除操作及添加索引等。
+
+<img width="960" alt="4" src="https://user-images.githubusercontent.com/35037130/203300077-30dd2b9d-55ea-4110-a978-94ab73d8a4de.png">
+<img width="960" alt="5" src="https://user-images.githubusercontent.com/35037130/203300136-99c277d1-7bdf-4720-83c2-3cc29f2b564f.png">
+
+单击QUERIES菜单以调出查询编辑器并键入以下内容（调整文档 ID 以匹配你的文档），查询结果如图（可以JSON显示，也可Table格式显示，Table更直观）
+return document("disease/117310")
+
+<img width="1440" alt="6" src="https://user-images.githubusercontent.com/35037130/203302063-b884564b-da86-4f0b-ab6e-16ec3ee287f7.png">
+<img width="1306" alt="7" src="https://user-images.githubusercontent.com/35037130/203302834-ecfed703-f68c-4360-88ed-e3148a1ea55b.png">
+
+返回组合查询：
+return document(["disease/117310","disease/117311","disease/117315"])
+
+ DOCUMENT()是一个函数，用于检索单个文档或您知道_keys 或_ids 的文档列表。这种类型的查询称为数据访问查询。不会创建、更改或删除任何数据。
+ <img width="1315" alt="8" src="https://user-images.githubusercontent.com/35037130/203305002-d3a8df6c-1c26-4213-9215-b3fca129c709.png">
 
 
+-------------------------------------------
 实战：
 
 二、创建document文档数据表：Disease、Drug、Disease_Drug(边界)，将文件导入Arangodb数据库，界面只接受json文件，如文档是CSV,则需要将文档转换为json格式。
