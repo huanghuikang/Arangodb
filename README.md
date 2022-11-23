@@ -80,17 +80,53 @@ ArangoDB 的查询语言 AQL 检索我们的文档。
 <img width="960" alt="4" src="https://user-images.githubusercontent.com/35037130/203300077-30dd2b9d-55ea-4110-a978-94ab73d8a4de.png">
 <img width="960" alt="5" src="https://user-images.githubusercontent.com/35037130/203300136-99c277d1-7bdf-4720-83c2-3cc29f2b564f.png">
 
+(1)查询
+
+
 单击QUERIES菜单以调出查询编辑器并键入以下内容（调整文档 ID 以匹配你的文档），查询结果如图（可以JSON显示，也可Table格式显示，Table更直观）
-return document("disease/117310")
+
+return document("disease/117310")       
+单击Execute运行
 
 <img width="1440" alt="6" src="https://user-images.githubusercontent.com/35037130/203302063-b884564b-da86-4f0b-ab6e-16ec3ee287f7.png">
 <img width="1306" alt="7" src="https://user-images.githubusercontent.com/35037130/203302834-ecfed703-f68c-4360-88ed-e3148a1ea55b.png">
 
 返回组合查询：
-return document(["disease/117310","disease/117311","disease/117315"])
+return document(["disease/117310","disease/117311","disease/117315"])       
+单击Execute运行
 
  DOCUMENT()是一个函数，用于检索单个文档或您知道_keys 或_ids 的文档列表。这种类型的查询称为数据访问查询。不会创建、更改或删除任何数据。
  <img width="1315" alt="8" src="https://user-images.githubusercontent.com/35037130/203305002-d3a8df6c-1c26-4213-9215-b3fca129c709.png">
+ 
+ 代码查询全表数据：
+ for c in disease
+    return c
+ <img width="1440" alt="8_1" src="https://user-images.githubusercontent.com/35037130/203536195-092ec77a-8d52-49cd-b8db-1cfbc15854d1.png">
+
+(2)新增
+在Collection目录中的Dcument点击新增
+<img width="960" alt="9" src="https://user-images.githubusercontent.com/35037130/203532707-de1e3be8-f5e6-4d8c-b378-c65c9ef53a1d.png">
+
+在QUERIES目录中录入INSERT代码新增
+<img width="1440" alt="10" src="https://user-images.githubusercontent.com/35037130/203533164-c2da7f17-ab6b-4a39-8add-1f5cd7002c07.png">
+
+还可通过Collection目录中的Dcument的导入新增
+<img width="1440" alt="11" src="https://user-images.githubusercontent.com/35037130/203533686-cf4bf3d2-7998-433c-bb51-4e36f140cc6a.png">
+
+（3）删除及修改
+在Collection目录中的Dcument进行操作
+<img width="1440" alt="12" src="https://user-images.githubusercontent.com/35037130/203535067-359b029a-3a21-4458-a675-18afbf4fcd3c.png">
+
+在QUERIES代码修改：
+update "117310" with{icd10: " slightly raised" } in disease
+<img width="1440" alt="13" src="https://user-images.githubusercontent.com/35037130/203539395-42a9315d-2cd8-4dc4-9dd8-579b5e552ca0.png">
+
+替换整个文档内容需要使用：
+replace "117310" with {...} in disease
+
+在QUERIES代码删除：
+remove "117310" in disease
+或 for c in disease remove c in disease 
 
 
 -------------------------------------------
