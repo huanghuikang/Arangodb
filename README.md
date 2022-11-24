@@ -85,7 +85,7 @@ ArangoDB 的查询语言 AQL 检索我们的文档。
 
 单击QUERIES菜单以调出查询编辑器并键入以下内容（调整文档 ID 以匹配你的文档），查询结果如图（可以JSON显示，也可Table格式显示，Table更直观）
 
-return document("disease/117310")       
+return document("disease","disease/117312")       
 单击Execute运行
 
 <img width="1440" alt="6" src="https://user-images.githubusercontent.com/35037130/203302063-b884564b-da86-4f0b-ab6e-16ec3ee287f7.png">
@@ -127,6 +127,43 @@ replace "117310" with {...} in disease
 在QUERIES代码删除：
 remove "117310" in disease
 或 for c in disease remove c in disease 
+
+下面将进一步学习
+AQL条件查询：
+filter关键字，过滤条件、返回固定列、别名
+
+for c in disease 
+filter c.ko=="H00835" or c.ko == "H01913"
+filter c.icd10 != null
+return {"名称":c.name,"描述" : c.description,"疾病类别":c.disease_category}
+<img width="1440" alt="14" src="https://user-images.githubusercontent.com/35037130/203769465-b2e37dcc-680d-4daf-a701-10134e1380ad.png">
+
+limit()：限制文档的数量
+for c in disease limit(5) return c.name
+
+for c in disease limit 4,6 return c.name    --跳过一定数量的记录并返回接下来的n 条文档
+
+sort():对文档的进行排序,desc 升序   asc 升序，desc  降序
+for c in disease 
+sort c.name desc
+limit 10
+return c.name
+
+多表查询：Characters 角色文档，Traits 角色特征文档
+DOCUMENT(): 函数可用于通过文档标识符查找单个或多个文档
+
+for c in Characters return c
+for c in Traits return c
+
+通过characters查询traits角色的属性
+for c in Characters
+    return document("Traits", c.traits)
+
+合并查询角色属性
+for c in Characters
+    return merge(c, { traits: DOCUMENT("Traits", c.traits)[*].en } )
+<img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
+
 
 
 -------------------------------------------
