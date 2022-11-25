@@ -164,6 +164,15 @@ for c in Characters
     return merge(c, { traits: DOCUMENT("Traits", c.traits)[*].en } )
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
 
+-------------------------------------------------------
+Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在ArangoDB中，两个文档通过边Edge的边缘文档链接。Edge文档存储在边缘集合中，通过 _from 和 _to 两个属性作为边缘条件。
+
+创建disease（疾病），drug（药物）和gene_tmp(pathogen_disease,病原体)三个文档及一个dd_edge边缘文档，此边缘文档联合疾病和药物。（文档的创建和数据导入不做赘述）
+
+最后在Graph目录新建Graph,填写对应 _from 和 _to 的关系，如下图
+
+<img width="486" alt="16" src="https://user-images.githubusercontent.com/35037130/203978090-fc96ada3-96b6-474e-9a71-0f14b5ebb852.png">
+<img width="1440" alt="18" src="https://user-images.githubusercontent.com/35037130/203978344-a56076d1-0704-4cb8-8d04-3f1adbd44bdc.png">
 
 
 -------------------------------------------
