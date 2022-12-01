@@ -195,14 +195,7 @@ for c in Characters
     return merge(c, { traits: DOCUMENT("Traits", c.traits)[*].en } )
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
 
--------------------------------------------------------
-函数：
-
-CONCAT()是一个可以将元素连接成字符串的函数。
-<img width="1440" alt="20" src="https://user-images.githubusercontent.com/35037130/204960111-662d1e8b-fa7d-4ee6-a473-0f1798db636a.png">
-
-
-------------
+-----------------------
 
 Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在ArangoDB中，两个文档通过边Edge的边缘文档链接。Edge文档存储在边缘集合中，通过 _from 和 _to 两个属性作为边缘条件。
 
@@ -212,6 +205,14 @@ Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在A
 
 <img width="486" alt="16" src="https://user-images.githubusercontent.com/35037130/203978090-fc96ada3-96b6-474e-9a71-0f14b5ebb852.png">
 <img width="1440" alt="18" src="https://user-images.githubusercontent.com/35037130/203978344-a56076d1-0704-4cb8-8d04-3f1adbd44bdc.png">
+
+-------------------------------------------------------
+函数：
+
+CONCAT()是一个可以将元素连接成字符串的函数。
+for c in Characters
+return concat(c.name,"'s age is",c.age)
+<img width="1440" alt="20" src="https://user-images.githubusercontent.com/35037130/204960111-662d1e8b-fa7d-4ee6-a473-0f1798db636a.png">
 
 
 -------------------------------------------
