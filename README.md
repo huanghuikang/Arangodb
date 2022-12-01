@@ -169,7 +169,7 @@ for c in disease limit(5) return c.name
 
 for c in disease limit 4,6 return c.name    --跳过一定数量的记录并返回接下来的n 条文档
 
-sort():对文档的进行排序,desc 升序   asc 升序，desc  降序
+sort():对文档的进行排序, DESC 降序， ASC 可以用于升序。 ASC 虽然是默认值，但可以省略。
 for c in disease 
 sort c.name desc
 limit 10
