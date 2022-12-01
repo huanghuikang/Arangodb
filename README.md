@@ -196,6 +196,37 @@ for c in Characters
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
 
 -----------------------
+遍历解释：遍历意味着以特定方式沿着图形的边缘行走，可选择使用一些过滤器。遍历在图形数据库中非常有效。在 ArangoDB 中，这是通过您已经听说过的混合索引类型实现的：边缘索引。
+
+图遍历语法：
+FOR vertex[, edge[, path] IN [min[..max] OUTBOUND|INBOUND|ANY startVertex edgeCollection[, more…]
+
+FOR 发出最多三个变量
+	vertex (object):遍历中的当前顶点。
+	edge (object, optional)：遍历中的当前边
+	path (object, optional)：具有两个成员的当前路径的表示
+		vertices：此路径上所有顶点的数组
+		edges：此路径上所有边的数组
+
+IN min..max ：定义遍历的最小和最大深度。如果不指定，min默认为1，max默认为min。
+![22](https://user-images.githubusercontent.com/35037130/204992116-7fdab22b-3134-4c16-b238-fbdcc6f3348a.png)
+
+OUTBOUND/INBOUND/ANY ：定义搜索的方向。
+![21](https://user-images.githubusercontent.com/35037130/204991692-9f7bff0f-4238-497c-a3ed-39107695284e.png)
+
+例如：
+返回可以从洛杉矶国际机场 (LAX) 沿着航班边缘直接到达（第一步）的所有机场的名称
+
+WITH airports 
+FOR airport IN 1..1 OUTBOUND 'airports/LAX' flights
+RETURN DISTINCT airport.name
+
+WITH:AQL 查询可以以 WITH 关键字开头，后跟查询隐式读取的集合列表。在集群环境中进行图形遍历时，这是必需的。通过隐式，意思是集合没有像前面的例子那样在语言结构中明确指定。
+
+这里确实明确声明了航班集合，但我们实际上并没有在 FOR 声明中声明机场，这就是它作为 WITH 语句的一部分包含在内的原因。这样做可以确保查询优化器可以在集群环境中保持运行时的性能。
+AQL 查询解析器会自动检测在查询中明确使用的集合。查询中涉及但查询解析器无法自动检测到的任何其他集合都可以使用 WITH 语句手动指定。
+
+--------------------------------
 
 Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在ArangoDB中，两个文档通过边Edge的边缘文档链接。Edge文档存储在边缘集合中，通过 _from 和 _to 两个属性作为边缘条件。
 
@@ -204,15 +235,55 @@ Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在A
 最后在Graph目录新建Graph,填写对应 _from 和 _to 的关系，如下图
 
 <img width="486" alt="16" src="https://user-images.githubusercontent.com/35037130/203978090-fc96ada3-96b6-474e-9a71-0f14b5ebb852.png">
+
 <img width="1440" alt="18" src="https://user-images.githubusercontent.com/35037130/203978344-a56076d1-0704-4cb8-8d04-3f1adbd44bdc.png">
 
 -------------------------------------------------------
+遍历选项：
+
+有关遍历的文档可看到还有控制遍历行为的选项（OPTIONS）。对于最小深度大于或等于 2 的遍历，有两种遍历图形的选择：
+
+	Depth-first 深度优先（默认）：继续沿着该路径上的起始顶点到最后一个顶点的边或直到达到最大遍历深度，然后沿着其他路径走。
+	
+	Breadth-first 广度优先（可选）：跟随从起始顶点到下一层的所有边，然后跟随它们邻居的所有边到另一层并继续这种模式，直到没有更多的边可以跟随或达到最大遍历深度。
+
+![23](https://user-images.githubusercontent.com/35037130/205030816-ad5b8a94-4bf4-4cfc-9472-f31d025fe88d.png)
+![24](https://user-images.githubusercontent.com/35037130/205030859-7d9387eb-f28b-428b-81a6-03db6f139451.png)
+
+**单个顶点的边没有特定的顺序。因此，S→C 可以在 S→A 和 S→B 之前返回。仍然使用广度优先搜索在较长路径之前返回较短的路径。
+
+遍历唯一性：并非每个图都只有一条从所选起始顶点到其连接顶点的路径。
+
+默认情况下，如果再次遇到已经访问过的边，则沿任何路径的遍历都会停止。它可以防止您的遍历在达到最大遍历深度之前绕圈子运行。不产生过多不需要的路径是一种安全措施。除非以其他方式配置遍历，否则路径上的重复顶点是允许的。
+
+为了阻止起始顶点（或其他顶点）被多次访问，我们可以通过两种方式为顶点启用唯一性（ OPTION{ bfs: true }（广度优先搜索））：
+
+	uniqueVertices: 'path' 确保每个单独的路径上没有重复的顶点。
+	
+	uniqueVertices: 'global' 确保在整个遍历过程中访问每个可到达的顶点一次。
+	
+	uniqueVertices: 'global'有去重的作用，与DISTINCT比较，RETURN DISTINCT仅在遍历返回所有顶点（巨大的中间结果）后才对机场进行重复数据删除，而 uniqueVertices: 'global' 是一个遍历选项，指示遍历器立即忽略重复项。
+
+最短路径查询：
+WITH airports FOR v IN OUTBOUND SHORTEST_PATH 'airports/BIS' TO 'airports/JFK' flights
+ RETURN v.name
+ 
+Shortest_Path 查询可以返回不同的结果。它只是找到并返回可能的多个最短路径之一。
+
+
+
+--------------------
+
 函数：
 
-CONCAT()是一个可以将元素连接成字符串的函数。
+CONCAT() ：是一个可以将元素连接成字符串的函数。
 for c in Characters
 return concat(c.name,"'s age is",c.age)
 <img width="1440" alt="20" src="https://user-images.githubusercontent.com/35037130/204960111-662d1e8b-fa7d-4ee6-a473-0f1798db636a.png">
+
+LENGTH() ：获取数组的长度或文档中的属性数。
+
+COLLECT对中间结果进行无条件分组，也就是将所有过滤后的文档分组到一起。
 
 
 -------------------------------------------
