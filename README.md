@@ -144,6 +144,9 @@ return document(["disease/117310","disease/117311","disease/117315"])
 <img width="1440" alt="12" src="https://user-images.githubusercontent.com/35037130/203535067-359b029a-3a21-4458-a675-18afbf4fcd3c.png">
 
 在QUERIES代码修改：
+
+UPDATE 关键字后跟文档键（或具有属性的文档/对象 ） _key 以标识要修改的内容。要更新的属性写为 WITH 关键字后的对象。 IN 表示在哪个集合中执行此操作，就像 INTO （这两个关键字在这里实际上可以互换）
+
 update "117310" with{icd10: " slightly raised" } in disease
 <img width="1440" alt="13" src="https://user-images.githubusercontent.com/35037130/203539395-42a9315d-2cd8-4dc4-9dd8-579b5e552ca0.png">
 
