@@ -145,7 +145,9 @@ return document(["disease/117310","disease/117311","disease/117315"])
 
 在QUERIES代码修改：
 
-UPDATE 关键字后跟文档键（或具有属性的文档/对象 ） _key 以标识要修改的内容。要更新的属性写为 WITH 关键字后的对象。 IN 表示在哪个集合中执行此操作，就像 INTO （这两个关键字在这里实际上可以互换）
+UPDATE 允许部分编辑现有文档, 关键字后跟文档键（或具有属性的文档/对象 ） _key 以标识要修改的内容。要更新的属性写为 WITH 关键字后的对象。 IN 表示在哪个集合中执行此操作，就像 INTO （这两个关键字在这里实际上可以互换）
+
+REPLACE，它会删除所有属性（除了 _key 和 _id，它们保持不变）并且只添加指定的属性。
 
 update "117310" with{icd10: " slightly raised" } in disease
 <img width="1440" alt="13" src="https://user-images.githubusercontent.com/35037130/203539395-42a9315d-2cd8-4dc4-9dd8-579b5e552ca0.png">
@@ -194,6 +196,14 @@ for c in Characters
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
 
 -------------------------------------------------------
+函数：
+
+CONCAT()是一个可以将元素连接成字符串的函数。
+<img width="1440" alt="20" src="https://user-images.githubusercontent.com/35037130/204960111-662d1e8b-fa7d-4ee6-a473-0f1798db636a.png">
+
+
+------------
+
 Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在ArangoDB中，两个文档通过边Edge的边缘文档链接。Edge文档存储在边缘集合中，通过 _from 和 _to 两个属性作为边缘条件。
 
 创建disease（疾病），drug（药物）和gene_tmp(pathogen_disease,病原体)三个文档及一个dd_edge边缘文档，此边缘文档联合疾病和药物。（文档的创建和数据导入不做赘述）
