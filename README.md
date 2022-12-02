@@ -174,7 +174,7 @@ for c in disease limit(5) return c.name
 
 for c in disease limit 4,6 return c.name    --跳过一定数量的记录并返回接下来的n 条文档
 
-sort():对文档的进行排序, DESC 降序， ASC 可以用于升序。 ASC 虽然是默认值，但可以省略。
+sort():对文档的进行排序, DESC 降序， ASC 可以用于升序。 ASC 虽然是默认值，但可以省略。  多列排序按照从上到下，从左往右排序。
 for c in disease 
 sort c.name desc
 limit 10
@@ -211,7 +211,8 @@ FOR 发出最多三个变量
 IN min..max ：定义遍历的最小和最大深度。如果不指定，min默认为1，max默认为min。
 ![22](https://user-images.githubusercontent.com/35037130/204992116-7fdab22b-3134-4c16-b238-fbdcc6f3348a.png)
 
-OUTBOUND/INBOUND/ANY ：定义搜索的方向。
+** OUTBOUND/INBOUND/ANY ：定义搜索的方向。
+
 ![21](https://user-images.githubusercontent.com/35037130/204991692-9f7bff0f-4238-497c-a3ed-39107695284e.png)
 
 例如：
@@ -256,7 +257,7 @@ Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在A
 
 默认情况下，如果再次遇到已经访问过的边，则沿任何路径的遍历都会停止。它可以防止您的遍历在达到最大遍历深度之前绕圈子运行。不产生过多不需要的路径是一种安全措施。除非以其他方式配置遍历，否则路径上的重复顶点是允许的。
 
-为了阻止起始顶点（或其他顶点）被多次访问，我们可以通过两种方式为顶点启用唯一性（ OPTION{ bfs: true }（广度优先搜索））：
+*** 为了阻止起始顶点（或其他顶点）被多次访问，我们可以通过两种方式为顶点启用唯一性（ OPTION{ bfs: true }（广度优先搜索））：
 
 	uniqueVertices: 'path' 确保每个单独的路径上没有重复的顶点。
 	
@@ -285,8 +286,106 @@ LENGTH() ：获取数组的长度或文档中的属性数。
 
 COLLECT对中间结果进行无条件分组，也就是将所有过滤后的文档分组到一起。
 
-
 -------------------------------------------
+实例一：
+
+添加文档集合：Characters 
+
+AQL语句：INSERT document INTO collectionName
+
+文档是一个对象，就像您从 JavaScript 或 JSON 中了解到的那样，它由属性键和值对组成。键总是字符序列（字符串），而属性值可以有不同的类型：null、boolean (true, false)、number (integer and floating point)、string、array、object
+
+接入文档：
+INSERT {
+  "name": "Ned",
+  "surname": "Stark",
+  "alive": true,
+  "age": 41,
+  "traits": ["A","H","C","N","P"]
+} INTO Characters
+
+或
+
+LET data = [
+  { "name": "Robert", "surname": "Baratheon", "alive": false, "traits": ["A","H","C"] },
+  { "name": "Jaime", "surname": "Lannister", "alive": true, "age": 36, "traits": ["A","F","B"] },
+  ...
+  { "name": "Roose", "surname": "Bolton", "alive": true, "traits": ["H","E","F","A"] },
+  { "name": "The High Sparrow", "alive": true, "traits": ["H","M","F","O"] }
+]
+
+FOR d IN data
+  INSERT d INTO Characters
+
+用关键字 LET 定义一个变量，然后用 FOR 迭代 INSERT 文档 Characters 中
+
+阅读文件AQL语法：FOR variableName IN collectionName 或 DOCUMENT() 函数 
+
+FOR c IN Characters RETURN c
+
+RETURN DOCUMENT("Characters/85502")  或  RETURN DOCUMENT("Characters", [ "85502","85503" ])
+
+修改文件AQL语法：UPDATE documentKey WITH object IN collectionName  或  REPLACE documentKey WITH object IN collectionName
+
+删除文件AQL语法：REMOVE documentKey IN collectionName
+
+带 FOR 迭代查询：
+
+FOR c IN Characters FILTER c._key == "85502" RETURN c  或 FOR c IN Characters FILTER c._key in ( "85502" , "85503") RETURN c
+
+运算符： == 、 != 、 >= 、 <= 、 > 、< 、and 、or 
+
+合并字符和特征：字母——特征键——解析为有意义的特征，需要合并字符文档和特征文档中的数据，可以通过使用MERGE()函数和子查询来实现。
+FOR c IN Characters
+  RETURN MERGE(c, 
+		  {
+		    traits: (
+		      FOR key IN c.traits
+			FOR t IN Traits
+			  FILTER t._key == key
+			  RETURN t.en
+			    )
+		  }
+              )
+	      
+<img width="1440" alt="25" src="https://user-images.githubusercontent.com/35037130/205229886-34a80ee6-63a7-41bb-b707-1fd692280d4e.png">
+
+图遍历,确定关系
+
+创建边缘 Edge
+
+LET data = [
+    {
+        "parent": { "name": "Ned", "surname": "Stark" },
+        "child": { "name": "Robb", "surname": "Stark" }
+    }, 
+    ... 
+    , {
+        "parent": { "name": "Jaime", "surname": "Lannister" },
+        "child": { "name": "Joffrey", "surname": "Baratheon" }
+    }
+]
+
+FOR rel in data
+    LET parentId = FIRST(
+        FOR c IN Characters
+            FILTER c.name == rel.parent.name
+            FILTER c.surname == rel.parent.surname
+            LIMIT 1
+            RETURN c._id
+    )
+    LET childId = FIRST(
+        FOR c IN Characters
+            FILTER c.name == rel.child.name
+            FILTER c.surname == rel.child.surname
+            LIMIT 1
+            RETURN c._id
+    )
+    FILTER parentId != null AND childId != null
+    INSERT { _from: childId, _to: parentId } INTO ChildOf
+    RETURN NEW
+
+--------------------
 实战：
 
 二、创建document文档数据表：Disease、Drug、Disease_Drug(边界)，将文件导入Arangodb数据库，界面只接受json文件，如文档是CSV,则需要将文档转换为json格式。
