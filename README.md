@@ -333,7 +333,7 @@ RETURN DOCUMENT("Characters/85502")  或  RETURN DOCUMENT("Characters", [ "85502
 
 FOR c IN Characters FILTER c._key == "85502" RETURN c  或 FOR c IN Characters FILTER c._key in ( "85502" , "85503") RETURN c
 
-运算符： == 、 != 、 >= 、 <= 、 > 、< 、and 、or 
+运算符： == 、 != 、 >= 、 <= 、 > 、< 、and --> &&（连词） 、or --> ||(析取) 、not --> !（否定/反转） 、 in 、not in 、 like
 
 合并字符和特征：字母——特征键——解析为有意义的特征，需要合并字符文档和特征文档中的数据，可以通过使用MERGE()函数和子查询来实现。
 FOR c IN Characters
