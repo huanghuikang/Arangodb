@@ -17,20 +17,49 @@ Databases are sets of collections. Collections store records, which are referred
 
 数据库是集合的集合。 集合存储记录，称为文档。
 
-一、首先配置Arangodb环境，用Linux和Windows均可配置
+First configure the Arangodb environment, both Linux and Windows can be configured.
+
+一、首先配置Arangodb环境，用Linux和Windows均可配置。
+
+The Linux configuration method is as follows:
+
 Linux的配置方法如下：
+
+Download the installation package: https://www.arangodb.com/download/
 
 a、下载安装包：https://www.arangodb.com/download/
 
+Install Arangodb: sudo yum install arangodb3-3.6.0-1.0.x86_64.rpm
+
 b、安装Arangodb：sudo yum install arangodb3-3.6.0-1.0.x86_64.rpm
+
+set root password and running : arango-secure-installation
 
 c、设置root密码：运行arango-secure-installation
 
-d、如需修改访问地址，则更新配置文件/etc/arangodb3/arangod.conf
+If you need to modify the access address, update the configuration file /etc/arangodb3/arangod.conf
+
 	vim arangod.conf
+	
+	default: endpoint = tcp://127.0.0.1:8529 and the port is 8529
+	
+	for example: endpoint = tcp://10.10.10.1:8529
+	
+d、如需修改访问地址，则更新配置文件 /etc/arangodb3/arangod.conf
+
+	vim arangod.conf
+	
 	默认：endpoint = tcp://127.0.0.1:8529，默认端口为8529
+	
 	如：endpoint = tcp://10.10.10.1:8529
 	
+then we running ArangoDB
+	systemctl start arangodb3.service
+	
+	systemctl stop arangodb3.service
+	
+	systemctl restart arangodb3.service
+
 e、开启ArangoDB
 
 	systemctl start arangodb3.service
@@ -38,13 +67,22 @@ e、开启ArangoDB
 	systemctl stop arangodb3.service       #关闭arangoDB
 	
 	systemctl restart arangodb3.service    #重启arangoDB
-	
+
+View the running status of arangoDB
+	systemctl status arangodb3.service
+
 f、查看arangoDB运行状态
 
 	systemctl status arangodb3.service ,出现active为正常运行
 	
 -----------------------------------------------------------------------------
-window系统配置方法如下：
+The windows system configuration method is as follows:
+
+windows系统配置方法如下：
+
+Download the Arangodb compressed package : https://pan.baidu.com/s/117vOGh-HKKmIFwk7C1SAlQ   
+
+passward: as4w
 
 1、下载Arangodb压缩包：
 
@@ -52,17 +90,29 @@ window系统配置方法如下：
 
 提取码：as4w
 
-2、Windows配置环境变量，将解压包的ArangoDB3e-3.7.18_win64\usr\bin配置到PATH系统变量中
+Windows configuration environment variables, and unpack the ArangoDB3e-3.7.18_win64\usr\bin Configured in the PATH system variable.
 
-3、双击打开bin文件夹中的arangodb.exe执行文件
+2、Windows配置环境变量，将解压包的 ArangoDB3e-3.7.18_win64\usr\bin 配置到 PATH 系统变量中。
 
-4、打开浏览器进入http://127.0.0.1:8529/_db/_system/_admin/aardvark/index.html#login（若没修改arangod.conf配置文件，一般地址不变）
+Double-click to open the arangodb.exe execution file in the bin folder.
 
-5、登录界面用root用户，密码为空
+3、双击打开bin文件夹中的 arangodb.exe 执行文件
+
+then open the browser and enter http://127.0.0.1:8529/_db/_system/_admin/aardvark/index.html#login (if don't update arangod.conf, he general URL remains unchanged)
+
+4、打开浏览器进入 http://127.0.0.1:8529/_db/_system/_admin/aardvark/index.html#login（若没修改 arangod.conf 配置文件，一般地址不变）
+
+The login interface uses the root user, and the password is empty.
+
+5、登录界面用root用户，密码为空.
 <img width="1440" alt="1" src="https://user-images.githubusercontent.com/35037130/202941495-0abe5883-d856-4dbd-9b47-12765a63c852.png">
 
 <img width="1440" alt="2" src="https://user-images.githubusercontent.com/35037130/202941602-ba8bd711-fe34-4059-b697-f06f768c4101.png">
-出现如下界面说明登录成功
+
+The following interface appears to indicate that the login is successful.
+
+出现如下界面说明登录成功。
+
 <img width="1440" alt="3" src="https://user-images.githubusercontent.com/35037130/202941853-9885a4e9-6e27-458f-b594-fbd21dff6802.png">
 
 ----------------------------------------------------------
