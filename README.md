@@ -116,18 +116,27 @@ The following interface appears to indicate that the login is successful.
 <img width="1440" alt="3" src="https://user-images.githubusercontent.com/35037130/202941853-9885a4e9-6e27-458f-b594-fbd21dff6802.png">
 
 ----------------------------------------------------------
+ArangoDB Query Language (AQL) can be used to retrieve and modify data stored in ArangoDB. Primarily a declarative language, AQL is similar to Structured Query Language (SQL). AQL supports reading and modifying collection data, but does not support data definition operations such as creating and deleting databases, collections, and indexes. It is a pure data manipulation language (DML), not data definition language (DDL) or data control language (DCL).
 
 ArangoDB查询语言(AQL)可用于检索和修改存储在ArangoDB中的数据。AQL主要是一种声明性语言，AQL类似于结构化查询语言(SQL)。AQL支持读取和修改集合数据，但不支持创建和删除数据库、集合和索引等数据定义操作。它是一种纯数据操作语言(DML)，而不是数据定义语言(DDL)或数据控制语言(DCL)。
+
+Collections consist of documents. It is uniquely identified by its collection identifier. It also has a unique name that clients should use to identify and access it. Collections can be renamed. This will change the collection name but not the collection identifier. The type of collection is specified by the user when creating the collection. There are currently two types: document and edge. Defaults to document type.
+
+	Document include documentation and each document is a JSON object, built-in main index, each document has a unique _key, which can be quickly searched.  Documents can be vertices if they are used as nodes in a graph.
+	
+	Edge include documentation. But it has a special edge attribute _from: the _id value of the source vertex, _to: the _id value of the target vertex; the built-in edge index of each edge set; the place where the relationship is stored, similar to the many-to-many relationship in the SQL database system ( crosstab).
 
 Collection：集合由文档组成。它由其集合标识符唯一标识。它还有一个惟一的名称，客户端应该使用它来识别和访问它。集合可以重命名。这将更改集合名称，但不会更改集合标识符。集合的类型由用户在创建集合时指定。目前有两种类型:文档和边缘。默认为文档类型。
 
 	Document：包含文档，每个文档都是一个 JSON 对象；内置主索引，每个文档都有一个唯一的_key，可以快速查找；如果文档用作图中的节点，则文档可以是顶点。
 	
 	Edge: 包含文档，但具有特殊边属性 _from :源顶点的_id值， _to :目标顶点的_id值；每个边缘集合的内置边缘索引；存放关系的地方，类似于 SQL 数据库系统中的多对多关系（交叉表）。
-	
+
+Views are composed of documents. It is uniquely identified by its identifier. It also has a unique name that clients should use to identify and access it. Views can be renamed. This will change the view name, but not the view identifier. Views have a type specified by the user when creating the view.
+
 View：视图由文档组成。它由其标识符唯一标识。它还有一个唯一的名称，客户端应该使用它来识别和访问它。视图可以重命名。这将更改视图名称，但不会更改视图标识符。视图具有由用户在创建视图时指定的类型。
 
-当前唯一可用的视图类型是ArangoSearch。
+Graph, combined with one or more specified Documents and Edges to form a Graph.
 
 Graph：图表，根据指定的一个或多个Document和Edge进行结合，组成一个Graph
 
