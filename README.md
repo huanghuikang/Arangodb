@@ -1,13 +1,21 @@
                                          Arangodb Learning
 # Arangodb
 
+ArangoDB conception
+
 Arangodb概念
 
-ArangoDB 是一款储存文档、图形并提供查询的多模型数据库,支持键值对、文档和图形模式的数据储存
+ArangoDB is a multi-model database that stores documents, graphs and provides queries. It supports data storage of key-value pairs, documents and graph modes.
 
-ArangoDB 是一个多模型、开源数据库，具有灵活的文档、图形和键值数据模型。使用方便的类似 SQL 的查询语言或 JavaScript 扩展构建高性能应用程序
+ArangoDB 是一款储存文档、图形并提供查询的多模型数据库,支持键值对、文档和图形模式的数据储存。
+
+ArangoDB is a multi-model, open-source database with flexible document, graph, and key-value data models. Build high-performance applications using a convenient SQL-like query language or JavaScript extensions.
+
+ArangoDB 是一个多模型、开源数据库，具有灵活的文档、图形和键值数据模型。使用方便的类似 SQL 的查询语言或 JavaScript 扩展构建高性能应用程序。
 
 Databases are sets of collections. Collections store records, which are referred to as documents.
+
+数据库是集合的集合。 集合存储记录，称为文档。
 
 一、首先配置Arangodb环境，用Linux和Windows均可配置
 Linux的配置方法如下：
