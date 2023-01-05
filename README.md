@@ -141,32 +141,58 @@ Graph, combined with one or more specified Documents and Edges to form a Graph.
 Graph：图表，根据指定的一个或多个Document和Edge进行结合，组成一个Graph
 
 -------------------------------------------
+Basic use of Arangodb
 
 Arangodb基本使用
+
+The keywords are as follows
 
 关键字：
 <img width="364" alt="19" src="https://user-images.githubusercontent.com/35037130/204262888-11b6945b-f68f-4e36-81b7-2c142dbcac0f.png">
 
+Number type:
+
 数字类型：
 
+  The value null can be used to represent an empty or non-existent value, which is neither 0 nor equal to the string "" .
+  
   空值：值 null 可用于表示空值或不存在的值，它不为0也不等于字符串 "" 。
   
-  boolean 型：布乐数据类型有两种可能，true 和 false 。
+  Boolean data type has two possibilities, true and false.
+  
+  boolean 型：布尔数据类型有两种可能，true 和 false 。
+  
+  Integers and real numbers (floating point numbers), can be marked with + or - .
   
   number 型：整数和实数（浮点数），可用 + 或 - 标记。
   
+  Strings must be enclosed in single quotes or double quotes. When using special characters, you need to use backslash \ to escape. (All strings must be UTF-8 encoded)
+  
   string 型：必须用单引号或双引号括起，使用特殊字符时，需要用反斜杠 \ 转意。（所有字符串都必须采用 UTF-8 编码）
   
+  Composite Type: Array
+  
   复合类型：数组
+  
+    Array is a collection of unnamed values, each accessible by their position, is called a list. Arrays are enclosed in square brackets [array values], and array values are separated by commas.
+    
     array:末命名值的组合，每个值都可以通过它们的位置访问，称为列表。
+    
       数组/列表：数组以中括号 [ 数组值 ] ，数组值用逗号分隔。
-      
+    
+    Object is a collection of named values, each of which can be accessed by their name, with Document being the top-level object.
+    
     object:命名值的组合，每个值都可以通过它们的名称访问，文档是顶层的对象。
+       
+       Object declarations for documents and files are declared with curly braces { object/value pair } , and each property in an object is a name/value pair. Property names and values are separated by a colon : . Names are strings and can be quoted or unquoted, while values can be of any type, including subobjects. Special characters need to be escaped.
+       
        文档/文件：对象声明用大括号 ｛ 对象/值对 ｝ ，对象中的每个属性是一个名称/值对。属性名称和值使用冒号分隔 : 。名称是字符串，可以带引号或不带引号，而值可以是任何类型，包括子对象。特殊字符需要转意。
-   
-   绑定参数：
+
+ArangoDB's query language, AQL, retrieves our documents.
 
 ArangoDB 的查询语言 AQL 检索我们的文档。
+
+Directly view the Dcument or Edge in the Collection directory, click one of the documents, and there is information about the relevant documents in it. You can modify or delete the information of the document, add, modify, delete the data content, and add indexes.
 
 直接查看Collection目录里面有Dcument或Edge，点击其中一个文档，里面有相关文档的信息，可以对文档的信息进行修改、删除操作，对数据内容进行新增、修改、删除操作及添加索引等。
 
@@ -175,56 +201,97 @@ ArangoDB 的查询语言 AQL 检索我们的文档。
 
 (1)查询
 
+Click the QUERIES menu to bring up the query editor and type the following content (adjust the document ID to match your document), the query result is shown in the figure (can be displayed in JSON or Table format, Table is more intuitive).
 
 单击QUERIES菜单以调出查询编辑器并键入以下内容（调整文档 ID 以匹配你的文档），查询结果如图（可以JSON显示，也可Table格式显示，Table更直观）
 
-return document("disease","disease/117312")       
+return document("disease","disease/117312")   
+
+Click Execute to run
+
 单击Execute运行
 
 <img width="1440" alt="6" src="https://user-images.githubusercontent.com/35037130/203302063-b884564b-da86-4f0b-ab6e-16ec3ee287f7.png">
 <img width="1306" alt="7" src="https://user-images.githubusercontent.com/35037130/203302834-ecfed703-f68c-4360-88ed-e3148a1ea55b.png">
 
-返回组合查询：
-return document(["disease/117310","disease/117311","disease/117315"])       
-单击Execute运行
+Returning a combined query:
 
+返回组合查询：
+
+return document(["disease/117310","disease/117311","disease/117315"])       
+
+ DOCUMENT() is a function to retrieve a single document or a list of documents whose _keys or _ids you know. This type of query is called a data access query. No data will be created, changed or deleted.
+ 
  DOCUMENT()是一个函数，用于检索单个文档或您知道_keys 或_ids 的文档列表。这种类型的查询称为数据访问查询。不会创建、更改或删除任何数据。
+ 
  <img width="1315" alt="8" src="https://user-images.githubusercontent.com/35037130/203305002-d3a8df6c-1c26-4213-9215-b3fca129c709.png">
  
- 代码查询全表数据：
+ Query full table data:
+ 
+ 查询全表数据：
+ 
  for c in disease
     return c
+    
  <img width="1440" alt="8_1" src="https://user-images.githubusercontent.com/35037130/203536195-092ec77a-8d52-49cd-b8db-1cfbc15854d1.png">
 
 (2)新增
-在Collection目录中的Dcument点击新增
+
+Click Add in Dcument in the Collection directory.
+
+在 Collection 目录中的 Dcument 点击新增
+
 <img width="960" alt="9" src="https://user-images.githubusercontent.com/35037130/203532707-de1e3be8-f5e6-4d8c-b378-c65c9ef53a1d.png">
 
+Enter the INSERT code in the QUERIES directory to add.
+
 在QUERIES目录中录入INSERT代码新增
+
 <img width="1440" alt="10" src="https://user-images.githubusercontent.com/35037130/203533164-c2da7f17-ab6b-4a39-8add-1f5cd7002c07.png">
 
+It can also be added through the import of Dcument in the Collection directory.
+
 还可通过Collection目录中的Dcument的导入新增
+
 <img width="1440" alt="11" src="https://user-images.githubusercontent.com/35037130/203533686-cf4bf3d2-7998-433c-bb51-4e36f140cc6a.png">
 
 （3）删除及修改
+
+Operate on the Dcument in the Collection directory.
+
 在Collection目录中的Dcument进行操作
+
 <img width="1440" alt="12" src="https://user-images.githubusercontent.com/35037130/203535067-359b029a-3a21-4458-a675-18afbf4fcd3c.png">
+
+In QUERIES code modification:
 
 在QUERIES代码修改：
 
+UPDATE allows partial editing of an existing document, keyword followed by the document key (or document/object with attribute _key ) to identify what is to be modified. The properties to update are written as objects after the WITH keyword. IN indicates in which collection to perform this operation, like INTO (the two keywords are actually interchangeable here)
+
 UPDATE 允许部分编辑现有文档, 关键字后跟文档键（或具有属性的文档/对象 ） _key 以标识要修改的内容。要更新的属性写为 WITH 关键字后的对象。 IN 表示在哪个集合中执行此操作，就像 INTO （这两个关键字在这里实际上可以互换）
+
+REPLACE, which removes all attributes (except _key and _id, which remain unchanged) and adds only the specified attributes.
 
 REPLACE，它会删除所有属性（除了 _key 和 _id，它们保持不变）并且只添加指定的属性。
 
 update "117310" with{icd10: " slightly raised" } in disease
 <img width="1440" alt="13" src="https://user-images.githubusercontent.com/35037130/203539395-42a9315d-2cd8-4dc4-9dd8-579b5e552ca0.png">
 
+To replace the entire document content you need to use
+
 替换整个文档内容需要使用：
+
 replace "117310" with {...} in disease
 
+In the QUERIES code delete:
+
 在QUERIES代码删除：
+
 remove "117310" in disease
 或 for c in disease remove c in disease 
+
+---------------------------------------------
 
 下面将进一步学习
 AQL条件查询：
