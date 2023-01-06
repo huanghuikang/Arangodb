@@ -289,50 +289,85 @@ In the QUERIES code delete:
 在QUERIES代码删除：
 
 remove "117310" in disease
-或 for c in disease remove c in disease 
+
+or
+
+for c in disease remove c in disease 
 
 ---------------------------------------------
 
-下面将进一步学习
-AQL条件查询：
-filter关键字，过滤条件、返回固定列、别名
+The following will further study, AQL conditional query:
+
+下面将进一步学习、AQL条件查询：
+
+filter keyword, filter condition, return fixed column, alias
+
+filter 关键字，过滤条件、返回固定列、别名
 
 for c in disease 
 filter c.ko=="H00835" or c.ko == "H01913"
 filter c.icd10 != null
 return {"名称":c.name,"描述" : c.description,"疾病类别":c.disease_category}
+
 <img width="1440" alt="14" src="https://user-images.githubusercontent.com/35037130/203769465-b2e37dcc-680d-4daf-a701-10134e1380ad.png">
 
+limit() function can be limited the number of documents
+
 limit()：限制文档的数量
+
 for c in disease limit(5) return c.name
 
 for c in disease limit 4,6 return c.name    --跳过一定数量的记录并返回接下来的n 条文档
 
+sort() function can be sorted documents, DESC is descending, ASC can be used for ascending. ASC is the default, but can be omitted. Multi-column sorting is sorted from top to bottom and from left to right.
+
 sort():对文档的进行排序, DESC 降序， ASC 可以用于升序。 ASC 虽然是默认值，但可以省略。  多列排序按照从上到下，从左往右排序。
+
 for c in disease 
 sort c.name desc
 limit 10
 return c.name
 
-多表查询：Characters 角色文档，Traits 角色特征文档
-DOCUMENT(): 函数可用于通过文档标识符查找单个或多个文档
+Multi-table query: Characters role document, Traits role feature document.
+
+多表查询：Characters 角色文档，Traits 角色特征文档。
+
+DOCUMENT() function can be used to find single or multiple documents by document identifier.
+
+DOCUMENT(): 函数可用于通过文档标识符查找单个或多个文档。
 
 for c in Characters return c
+
 for c in Traits return c
 
-通过characters查询traits角色的属性
+Query the attributes of the traits role through characters.
+
+通过characters查询traits角色的属性。
+
 for c in Characters
     return document("Traits", c.traits)
 
+Merge Query Role Attributes
+
 合并查询角色属性
+
 for c in Characters
     return merge(c, { traits: DOCUMENT("Traits", c.traits)[*].en } )
+    
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/35037130/203777401-59cb944a-2f01-42d2-9db9-32f07fe0931e.png">
 
 -----------------------
+
+Traversing means walking along the edges of a graph in a specific way, optionally using some filters. Traversals are very efficient in graph databases. In ArangoDB, this is accomplished with a hybrid index type you've already heard about: edge indexes.
+
 遍历解释：遍历意味着以特定方式沿着图形的边缘行走，可选择使用一些过滤器。遍历在图形数据库中非常有效。在 ArangoDB 中，这是通过您已经听说过的混合索引类型实现的：边缘索引。
 
+-------------------------------
+
+Graph Traversal Syntax：
+
 图遍历语法：
+
 FOR vertex[, edge[, path] IN [min[..max] OUTBOUND|INBOUND|ANY startVertex edgeCollection[, more…]
 
 FOR 发出最多三个变量
@@ -341,13 +376,20 @@ FOR 发出最多三个变量
 	path (object, optional)：具有两个成员的当前路径的表示
 		vertices：此路径上所有顶点的数组
 		edges：此路径上所有边的数组
+IN min..max : Defines the minimum and maximum depth for traversal. If not specified, min defaults to 1 and max defaults to min.
 
 IN min..max ：定义遍历的最小和最大深度。如果不指定，min默认为1，max默认为min。
+
 ![22](https://user-images.githubusercontent.com/35037130/204992116-7fdab22b-3134-4c16-b238-fbdcc6f3348a.png)
+
+** OUTBOUND/INBOUND/ANY : Defines the direction of the search.
 
 ** OUTBOUND/INBOUND/ANY ：定义搜索的方向。
 
 ![21](https://user-images.githubusercontent.com/35037130/204991692-9f7bff0f-4238-497c-a3ed-39107695284e.png)
+
+For example:
+Returns the names of all airports that are directly reachable (first step) from Los Angeles International Airport (LAX) along the edge of the flight
 
 例如：
 返回可以从洛杉矶国际机场 (LAX) 沿着航班边缘直接到达（第一步）的所有机场的名称
@@ -356,12 +398,23 @@ WITH airports
 FOR airport IN 1..1 OUTBOUND 'airports/LAX' flights
 RETURN DISTINCT airport.name
 
-WITH:AQL 查询可以以 WITH 关键字开头，后跟查询隐式读取的集合列表。在集群环境中进行图形遍历时，这是必需的。通过隐式，意思是集合没有像前面的例子那样在语言结构中明确指定。
+WITH: AQL queries can start with the WITH keyword followed by a list of collections that the query implicitly reads. This is required when doing graph traversal in a clustered environment. By implicit, it is meant that the collection is not explicitly specified in the language constructs as in the previous example.
+
+WITH: AQL 查询可以以 WITH 关键字开头，后跟查询隐式读取的集合列表。在集群环境中进行图形遍历时，这是必需的。通过隐式，意思是集合没有像前面的例子那样在语言结构中明确指定。
+
+The collection of flights is indeed explicitly declared here, but we're not actually declaring the airports in the FOR statement, which is why it's included as part of the WITH statement. Doing so ensures that the query optimizer can maintain runtime performance in a clustered environment.
+The AQL query parser automatically detects collections that are explicitly used in queries. Any other collections involved in the query but not automatically detected by the query parser can be specified manually using the WITH statement.
 
 这里确实明确声明了航班集合，但我们实际上并没有在 FOR 声明中声明机场，这就是它作为 WITH 语句的一部分包含在内的原因。这样做可以确保查询优化器可以在集群环境中保持运行时的性能。
 AQL 查询解析器会自动检测在查询中明确使用的集合。查询中涉及但查询解析器无法自动检测到的任何其他集合都可以使用 WITH 语句手动指定。
 
 --------------------------------
+
+Graph: Graph traversal, the relationship between two documents can build a graph. In ArangoDB, two documents are linked by an edge document of an edge. Edge documents are stored in edge collections, with _from and _to attributes as edge conditions.
+
+Create disease (disease), drug (drug) and gene_tmp (pathogen_disease, pathogen) three documents and a dd_edge edge document, which combines diseases and drugs. (Document creation and data import will not be described in detail)
+
+Finally, create a new Graph in the Graph directory and fill in the relationship between _from and _to, as shown below:
 
 Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在ArangoDB中，两个文档通过边Edge的边缘文档链接。Edge文档存储在边缘集合中，通过 _from 和 _to 两个属性作为边缘条件。
 
@@ -374,51 +427,87 @@ Graph: 图形遍历，两个文档之间的关系可以搭建一个图形。在A
 <img width="1440" alt="18" src="https://user-images.githubusercontent.com/35037130/203978344-a56076d1-0704-4cb8-8d04-3f1adbd44bdc.png">
 
 -------------------------------------------------------
+
+Traverse options:
+
 遍历选项：
+
+The documentation on traversal can see that there are also options (OPTIONS) that control the behavior of traversal. For traversals with a minimum depth greater than or equal to 2, there are two options for traversing the graph:
 
 有关遍历的文档可看到还有控制遍历行为的选项（OPTIONS）。对于最小深度大于或等于 2 的遍历，有两种遍历图形的选择：
 
+	Depth-first (default): Continue following the edge from the start vertex to the last vertex on the path or until the maximum traversal depth is reached, then follow other paths.
+	
 	Depth-first 深度优先（默认）：继续沿着该路径上的起始顶点到最后一个顶点的边或直到达到最大遍历深度，然后沿着其他路径走。
+	
+	Breadth-first (optional): follow all edges from the start vertex to the next layer, then follow all edges from their neighbors to another layer and continue this pattern until there are no more edges to follow or reach Maximum traversal depth.
 	
 	Breadth-first 广度优先（可选）：跟随从起始顶点到下一层的所有边，然后跟随它们邻居的所有边到另一层并继续这种模式，直到没有更多的边可以跟随或达到最大遍历深度。
 
 ![23](https://user-images.githubusercontent.com/35037130/205030816-ad5b8a94-4bf4-4cfc-9472-f31d025fe88d.png)
+
 ![24](https://user-images.githubusercontent.com/35037130/205030859-7d9387eb-f28b-428b-81a6-03db6f139451.png)
 
-**单个顶点的边没有特定的顺序。因此，S→C 可以在 S→A 和 S→B 之前返回。仍然使用广度优先搜索在较长路径之前返回较短的路径。
+** The edges of a single vertex are in no particular order. Therefore, S→C can return before S→A and S→B. Still using breadth-first search to return shorter paths before longer paths.
+
+** 单个顶点的边没有特定的顺序。因此，S→C 可以在 S→A 和 S→B 之前返回。仍然使用广度优先搜索在较长路径之前返回较短的路径。
+
+Traversal uniqueness is not every graph has exactly one path from a chosen start vertex to its connected vertices.
 
 遍历唯一性：并非每个图都只有一条从所选起始顶点到其连接顶点的路径。
 
+By default, traversal along any path stops if an already visited edge is encountered again. It prevents your traversal from running in circles before reaching the maximum traversal depth. It is a safety measure not to generate too many unneeded paths. Duplicate vertices on paths are allowed unless traversal is otherwise configured.
+
 默认情况下，如果再次遇到已经访问过的边，则沿任何路径的遍历都会停止。它可以防止您的遍历在达到最大遍历深度之前绕圈子运行。不产生过多不需要的路径是一种安全措施。除非以其他方式配置遍历，否则路径上的重复顶点是允许的。
 
+*** To prevent the starting vertex (or other vertices) from being visited more than once, we can enable uniqueness for a vertex ( OPTION{ bfs: true } (breadth-first search)) in two ways:
 *** 为了阻止起始顶点（或其他顶点）被多次访问，我们可以通过两种方式为顶点启用唯一性（ OPTION{ bfs: true }（广度优先搜索））：
 
+	uniqueVertices: 'path' ensures that there are no duplicate vertices on each individual path.
+	
 	uniqueVertices: 'path' 确保每个单独的路径上没有重复的顶点。
+	
+	uniqueVertices: 'global' ensures that every reachable vertex is visited once during the entire traversal.
 	
 	uniqueVertices: 'global' 确保在整个遍历过程中访问每个可到达的顶点一次。
 	
+	uniqueVertices: 'global' has the effect of deduplication, compared with DISTINCT, RETURN DISTINCT only deduplicates the airport after the traversal returns all vertices (huge intermediate results), and uniqueVertices: 'global' is a traversal option that indicates The traverser ignores duplicates immediately.
+	
 	uniqueVertices: 'global'有去重的作用，与DISTINCT比较，RETURN DISTINCT仅在遍历返回所有顶点（巨大的中间结果）后才对机场进行重复数据删除，而 uniqueVertices: 'global' 是一个遍历选项，指示遍历器立即忽略重复项。
 
+Shortest path query:
+
 最短路径查询：
+
 WITH airports FOR v IN OUTBOUND SHORTEST_PATH 'airports/BIS' TO 'airports/JFK' flights
  RETURN v.name
  
+ Shortest_Path queries can return different results. It just finds and returns one of multiple shortest paths possible.
+ 
 Shortest_Path 查询可以返回不同的结果。它只是找到并返回可能的多个最短路径之一。
-
-
 
 --------------------
 
+other functions：
+
 函数：
 
+CONCAT() function is a function that can concatenate elements into a string.
+
 CONCAT() ：是一个可以将元素连接成字符串的函数。
+
 for c in Characters
 return concat(c.name,"'s age is",c.age)
+
 <img width="1440" alt="20" src="https://user-images.githubusercontent.com/35037130/204960111-662d1e8b-fa7d-4ee6-a473-0f1798db636a.png">
+
+LENGTH() can be getted the length of an array or the number of attributes in a document.
 
 LENGTH() ：获取数组的长度或文档中的属性数。
 
-COLLECT对中间结果进行无条件分组，也就是将所有过滤后的文档分组到一起。
+COLLECT unconditionally groups intermediate results, that is, groups all filtered documents together.
+
+COLLECT 对中间结果进行无条件分组，也就是将所有过滤后的文档分组到一起。
 
 -------------------------------------------
 实例一：
