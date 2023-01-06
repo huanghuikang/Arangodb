@@ -510,15 +510,20 @@ COLLECT unconditionally groups intermediate results, that is, groups all filtere
 COLLECT 对中间结果进行无条件分组，也就是将所有过滤后的文档分组到一起。
 
 -------------------------------------------
+Example one:
+
 实例一：
+
+Add document collection: Characters
 
 添加文档集合：Characters 
 
-AQL语句：INSERT document INTO collectionName
+INSERT document INTO collectionName
+
+A document is an object, as you know it from JavaScript or JSON, consisting of property key and value pairs. Keys are always character sequences (strings), while property values can have different types: null, boolean (true, false), number (integer and floating point), string, array, object
 
 文档是一个对象，就像您从 JavaScript 或 JSON 中了解到的那样，它由属性键和值对组成。键总是字符序列（字符串），而属性值可以有不同的类型：null、boolean (true, false)、number (integer and floating point)、string、array、object
 
-接入文档：
 INSERT {
   "name": "Ned",
   "surname": "Stark",
@@ -527,7 +532,7 @@ INSERT {
   "traits": ["A","H","C","N","P"]
 } INTO Characters
 
-或
+Or
 
 LET data = [
   { "name": "Robert", "surname": "Baratheon", "alive": false, "traits": ["A","H","C"] },
@@ -540,25 +545,52 @@ LET data = [
 FOR d IN data
   INSERT d INTO Characters
 
-用关键字 LET 定义一个变量，然后用 FOR 迭代 INSERT 文档 Characters 中
+Define a variable with the keyword LET and then use FOR to iterate over the INSERT document Characters.
 
-阅读文件AQL语法：FOR variableName IN collectionName 或 DOCUMENT() 函数 
+用关键字 LET 定义一个变量，然后用 FOR 迭代 INSERT 文档 Characters .
+
+Read file AQL syntax: FOR variableName IN collectionName or DOCUMENT() function.
+
+阅读文件AQL语法：FOR variableName IN collectionName 或 DOCUMENT() 函数 .
 
 FOR c IN Characters RETURN c
 
-RETURN DOCUMENT("Characters/85502")  或  RETURN DOCUMENT("Characters", [ "85502","85503" ])
+RETURN DOCUMENT("Characters/85502")  
 
-修改文件AQL语法：UPDATE documentKey WITH object IN collectionName  或  REPLACE documentKey WITH object IN collectionName
+Or
 
-删除文件AQL语法：REMOVE documentKey IN collectionName
+RETURN DOCUMENT("Characters", [ "85502","85503" ])
+
+Update the file AQL syntax:
+
+修改文件AQL语法：
+
+UPDATE documentKey WITH object IN collectionName  
+
+Or
+
+REPLACE documentKey WITH object IN collectionName
+
+Delete file AQL syntax:
+
+删除文件AQL语法：
+
+REMOVE documentKey IN collectionName
+
+Iterate query with FOR:
 
 带 FOR 迭代查询：
 
 FOR c IN Characters FILTER c._key == "85502" RETURN c  或 FOR c IN Characters FILTER c._key in ( "85502" , "85503") RETURN c
 
-运算符： == 、 != 、 >= 、 <= 、 > 、< 、and --> &&（连词） 、or --> ||(析取) 、not --> !（否定/反转） 、 in 、not in 、 like
+Operators: == , != , >= , <= , > , < , and --> && (conjunction), or --> || (disjunction), not --> ! (negation/inversion) , in , not in , like .
+
+运算符： == 、 != 、 >= 、 <= 、 > 、< 、and --> &&（连词） 、or --> ||(析取) 、not --> !（否定/反转） 、 in 、not in 、 like 。
+
+Merge characters and features: letters—feature keys—are parsed into meaningful features, and data in character documents and feature documents need to be merged, which can be achieved by using the MERGE() function and subqueries.
 
 合并字符和特征：字母——特征键——解析为有意义的特征，需要合并字符文档和特征文档中的数据，可以通过使用MERGE()函数和子查询来实现。
+
 FOR c IN Characters
   RETURN MERGE(c, 
 		  {
@@ -573,7 +605,11 @@ FOR c IN Characters
 	      
 <img width="1440" alt="25" src="https://user-images.githubusercontent.com/35037130/205229886-34a80ee6-63a7-41bb-b707-1fd692280d4e.png">
 
+Graph traversal and determining relationships
+
 图遍历,确定关系
+
+Created Edge
 
 创建边缘 Edge
 
