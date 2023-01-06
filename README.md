@@ -645,8 +645,17 @@ FOR rel in data
     RETURN NEW
 
 --------------------
-实战：
+Example two:
 
-二、创建document文档数据表：Disease、Drug、Disease_Drug(边界)，将文件导入Arangodb数据库，界面只接受json文件，如文档是CSV,则需要将文档转换为json格式。
+Convert Disease, Drug, Disease_Drug CSV files to json format, ArangDB only accepts json files. Convert the file to csv format with csv_to_json.py.
 
-三、创建GRAPHS文件数据图,点击设置，将GRAPG Name、Edge definitions、fromCollections、toCollections、Vertex collections点保存即可创建图。
+1、将 Disease、Drug、Disease_Drug CSV 文件转换为 json 格式，ArangDB 只接受json文件。用 csv_to_json.py 将文件转换为 csv 格式。
+
+Create document and Edge in ArangDB.
+
+2、在ArangDB创建document文档及Edge边缘。
+
+Create a graph traversal. GRAPHS file data map, click Settings, save the GRAPG Name, Edge definitions, fromCollections, toCollections, and Vertex collections points to create a map.
+
+3、创建图遍历。GRAPHS文件数据图,点击设置，将GRAPG Name、Edge definitions、fromCollections、toCollections、Vertex collections点保存即可创建图。
+
