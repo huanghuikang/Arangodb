@@ -649,13 +649,21 @@ Example two:
 
 Convert Disease, Drug, Disease_Drug CSV files to json format, ArangDB only accepts json files. Convert the file to csv format with csv_to_json.py.
 
-1、将 Disease、Drug、Disease_Drug CSV 文件转换为 json 格式，ArangDB 只接受json文件。用 csv_to_json.py 将文件转换为 csv 格式。
+1、将 Disease、Drug、Disease_Drug、gene_tmp、pathogen_tmp CSV 文件转换为 json 格式，ArangDB 只接受json文件。用 csv_to_json.py 将文件转换为 csv 格式。
+
 
 Create document and Edge in ArangDB.
 
-2、在ArangDB创建document文档及Edge边缘。
+2、在ArangDB创建document文档及文档之间的Edge边缘。
+
+<img width="957" alt="26" src="https://user-images.githubusercontent.com/35037130/211126363-22ec26b3-f411-42f1-8729-eb38385c2732.png">
 
 Create a graph traversal. GRAPHS file data map, click Settings, save the GRAPG Name, Edge definitions, fromCollections, toCollections, and Vertex collections points to create a map.
 
 3、创建图遍历。GRAPHS文件数据图,点击设置，将GRAPG Name、Edge definitions、fromCollections、toCollections、Vertex collections点保存即可创建图。
 
+<img width="957" alt="27" src="https://user-images.githubusercontent.com/35037130/211126395-5b247a75-d03b-4606-99d1-586ed76981e6.png">
+
+<img width="957" alt="28" src="https://user-images.githubusercontent.com/35037130/211126401-569771bd-c3b8-4629-8583-580aae9a9f1b.png">
+
+<img width="957" alt="29" src="https://user-images.githubusercontent.com/35037130/211126408-8ca3fad4-85d8-4108-9ee3-c766fddbb985.png">
